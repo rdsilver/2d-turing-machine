@@ -1,0 +1,52 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>2D Turing Machine</title>
+  <link rel="icon" href="3dgifmaker23813.gif" type="image/gif">
+  <script
+  src="https://code.jquery.com/jquery-3.7.0.min.js"
+  integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+  crossorigin="anonymous"></script>  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js" integrity="sha512-bcfltY+lNLlNxz38yBBm/HLaUB1gTV6I0e+fahbF9pS6roIdzUytozWdnFV8ZnM6cSAG5EbmO0ag0a/fLZSG4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  <script src="https://peterolson.github.io/BigInteger.js/BigInteger.min.js"></script>
+  <script language="javascript" type="text/javascript" src="sketch.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div class="controls" style="font-family: Arial, sans-serif;">
+    <div class="control" style="margin-bottom: .5em;">
+        States:
+        <input type="number" min="1" max="26" value="5" id="states" style="margin-left: .5em;">
+    </div>
+
+    <div class="control" style="margin-bottom: .5em;">
+        Symbols:
+        <input type="number" min="2" max="10" value="2" id="symbols" style="margin-left: .5em;">
+    </div>
+
+    <div class="control" style="margin-bottom: .5em;">
+        Cell Size:
+        <input type="number" min="8" max="20" value="10" id="cellSize" style="margin-left: .5em;">
+    </div>
+
+    <div class="control" style="margin-bottom: .5em;">
+        Steps Per Second:
+        <input type="number" min="1" max="60" value="30" id="stepsPerSecond" style="margin-left: .5em;">
+    </div>
+  </div>
+  <div class="info" style="font-family: Arial, sans-serif; color: white;">
+    <div>
+      Steps: <span id="steps">0</span>
+    </div>
+    <div>
+      Halted: <span id="halted">false</span>
+    </div>
+    <div>
+      Out Of Bounds: <span id="out-of-bounds">false</span>
+    </div>
+    <div>
+      Press the n key to create a random machine
+    </div>
+  </div>
+	<div id="sketch"></div>
+</body>
+</html>

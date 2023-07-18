@@ -1,0 +1,26 @@
+body {
+	padding: 0; margin: 0;
+	background-color: rgb(48, 56, 65);
+}
+
+.control {
+	color: white;
+}
+
+.controls {
+	margin: 10px 50px 0;
+	display: inline-block;
+}
+
+.info {
+	float: right;
+	margin: 10px 300px 0 0;
+}
+
+.info div {
+	margin-bottom: .5em;
+}
+
+#sketch {
+	min-height: calc(100vh - 200px);
+}
