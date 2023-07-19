@@ -37,6 +37,7 @@ class TuringMachine {
 
     if (window.location.hash) {
       this.rules = window.location.hash.split('=')[1].split('_').map(subString => subString.match(/.{1,3}/g));
+      $("#states").val(this.rules.length);
     } else {
       setHash(this.rules);
     }
