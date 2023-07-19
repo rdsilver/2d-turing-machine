@@ -38,6 +38,7 @@ class TuringMachine {
     if (window.location.hash) {
       this.rules = window.location.hash.split('=')[1].split('_').map(subString => subString.match(/.{1,3}/g));
       $("#states").val(this.rules.length);
+      $('#symbols').val(this.rules[0].length);
     } else {
       setHash(this.rules);
     }
@@ -59,7 +60,9 @@ class TuringMachine {
     this.steps++;
     $('#steps').html(this.steps);
 
-    let convertedState = this.state.charCodeAt(0) - 65;
+    let convertedState = this.state.charCodeAt(0) <= 90 ? 
+      this.state.charCodeAt(0) - 65 :
+      this.state.charCodeAt(0) - 71;
     let rule = this.rules[convertedState][this.grid[this.headerCoords[0]][this.headerCoords[1]]];
 
     if (rule === '---') {
@@ -117,7 +120,7 @@ function generateRandomString(symbols, states) {
   const validChars = [
       ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], // First character
       ['L', 'U', 'D', 'R'], // Second character
-      ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] // Third character
+      ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'] // Third character
   ];
 
   let result = '';
