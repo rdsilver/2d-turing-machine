@@ -199,7 +199,6 @@ $(document).ready(function(){
 
   $("#cellSize").change(function(){
     background('white');
-    window.location.hash = '';
     turingMachine = new TuringMachine($("#cellSize").val(), $("#states").val(), $('#symbols').val());
   });
 
