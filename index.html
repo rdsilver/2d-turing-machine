@@ -12,41 +12,57 @@
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  <div class="controls" style="font-family: Arial, sans-serif;">
-    <div class="control" style="margin-bottom: .5em;">
-        States:
-        <input type="number" min="1" max="52" value="5" id="states" style="margin-left: .5em;">
+  <h1 class="header">2D Turing Machine</h1>
+  <div class="controls">
+    <div>
+      <span class="control">
+          States:
+          <input type="number" min="1" max="52" value="5" id="states">
+      </span>
+
+      <span class="control">
+          Symbols:
+          <input type="number" min="2" max="10" value="5" id="symbols">
+      </span>
     </div>
 
-    <div class="control" style="margin-bottom: .5em;">
-        Symbols:
-        <input type="number" min="2" max="10" value="2" id="symbols" style="margin-left: .5em;">
+    <div style="margin-top: 20px;">
+      <span class="control">
+          Cell Size:
+          <input type="number" min="1" max="20" value="10" id="cellSize">
+      </span>
+
+      <span class="control">
+          Steps Per Second:
+          <input type="number" min="1" max="60" value="30" id="stepsPerSecond">
+      </span>
     </div>
 
-    <div class="control" style="margin-bottom: .5em;">
-        Cell Size:
-        <input type="number" min="8" max="20" value="10" id="cellSize" style="margin-left: .5em;">
-    </div>
 
-    <div class="control" style="margin-bottom: .5em;">
-        Steps Per Second:
-        <input type="number" min="1" max="60" value="30" id="stepsPerSecond" style="margin-left: .5em;">
-    </div>
   </div>
-  <div class="info" style="font-family: Arial, sans-serif; color: white;">
+  <div class="info">
     <div>
       Steps: <span id="steps">0</span>
     </div>
     <div>
-      Halted: <span id="halted">false</span>
-    </div>
-    <div>
-      Out Of Bounds: <span id="out-of-bounds">false</span>
+      <span>
+        Halted: <span id="halted">false</span>
+      </span>
+      <span>
+        Out Of Bounds: <span id="out-of-bounds">false</span>
+      </span>
     </div>
     <div>
       Press the n key to create a random machine
     </div>
   </div>
 	<div id="sketch"></div>
+  <div id='search'>
+    <input type="checkbox" id="shouldSearch"> Auto Search For Busy Beavers?
+    <div>
+      Current Leader: <span id="leader">0</span>
+    </div>
+    <button id="getLeader">Copy Leader URL</button>
+  </div>
 </body>
 </html>

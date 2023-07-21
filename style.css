@@ -1,20 +1,40 @@
 body {
 	padding: 0; margin: 0;
-	background-color: rgb(48, 56, 65);
+    background: #303841;
+}
+
+.header {
+	color: white;
+	font-size: 30px;
+	font-family: "Bebas Neue",sans-serif;
+	text-align: center;
+	text-shadow: 1px 1px 2px #385068;
+	margin-top: 5px;
+	margin-bottom: 0;
 }
 
 .control {
-	color: white;
+	color: #ECFBFF;
+	margin-bottom: .5em;
+	text-shadow: 1px 1px 2px black;
 }
 
 .controls {
 	margin: 10px 50px 0;
 	display: inline-block;
+	font-family: Arial, sans-serif;
+}
+
+.controls input {
+	max-width: 38px;
+	margin-right: 10px;
 }
 
 .info {
 	float: right;
-	margin: 10px 300px 0 0;
+	margin-right: 50px;
+	color: #ECFBFF;
+	font-family: Arial, sans-serif;
 }
 
 .info div {
@@ -23,4 +43,35 @@ body {
 
 #sketch {
 	min-height: calc(100vh - 200px);
+	text-align: center;
+	margin-top: 15px;
+}
+
+#halted, #out-of-bounds, #steps {
+	text-transform: capitalize;
+	color: white;
+}
+
+#halted {
+	margin-right: 20px;
+}
+
+#halted.green {
+	color: rgb(144, 238, 144);
+}
+
+#out-of-bounds.red {
+	color: #FF0000;
+}
+
+#search {
+	margin: auto;
+	text-align: center;
+	color: white;
+	margin-top: 3px;
+}
+
+#search input {
+	position: relative;
+	top: 1px;
 }
