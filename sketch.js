@@ -19,7 +19,7 @@ function draw() {
     turingMachine.step();
     updateUI();
 
-    if ($('#shouldSearch').is(':checked') && (turingMachine.halted || turingMachine.outOfBounds || turingMachine.steps > 2000)) {
+    if ($('#shouldSearch').is(':checked') && (turingMachine.halted || turingMachine.outOfBounds || (Object.keys(turingMachine.grid).length < 5 && turingMachine.steps > 200))) {
       resetMachine();
     }
 }
@@ -70,9 +70,8 @@ class TuringMachine {
     this.halted = false;
     this.outOfBounds = false;
     this.colors = COLOR_PALLETE;
-
-    this.initializeFromHash();
     this.drawInitialGrid();
+    this.initializeFromHash();
   }
 
   step() {
