@@ -107,7 +107,6 @@ class TuringMachine {
         return;
     }
 
-    console.log(this.rules, rule);
     let newVal = parseInt(rule[0]);
     let direction = rule[1];
     let newState = rule[2];
