@@ -75,6 +75,7 @@ class TuringMachine {
   }
 
   step() {
+    if (!this.rules) return;
     if (this.halted) return;
     if (this.headerCoords[0] < 0 || this.headerCoords[0] >= this.width ||
         this.headerCoords[1] < 0 || this.headerCoords[1] >= this.height) {
@@ -158,7 +159,7 @@ class TuringMachine {
     } while (index1 === 0 && index2 === 0);
     rules[index1][index2] = '---';
 
-    if (rules.map(subArray => subArray.join('')).join('_').indexOf(STATE_STRING[index1]) >= 0) {
+    if (rules.map(subArray => subArray.join('')).join('').indexOf(STATE_STRING[index1]) >= 0) {
       return rules;
     } else {
       this.generateRules();
@@ -196,6 +197,7 @@ class TuringMachine {
   }
   
   setHash() {
+    if (!this.rules) return;
     window.location.hash = 'machine=' + this.rules.map(subArray => subArray.join('')).join('_');
   }
 }
@@ -204,11 +206,15 @@ $(document).ready(function(){
   $("#states").change(function(){
     window.location.hash = '';
     turingMachine = new TuringMachine($("#cellSize").val(), $("#states").val(), $('#symbols').val());
+    leaderURL = ''
+    maxSteps = 0;
   });
 
   $("#symbols").change(function(){
     window.location.hash = '';
     turingMachine = new TuringMachine($("#cellSize").val(), $("#states").val(), $('#symbols').val());
+    leaderURL = ''
+    maxSteps = 0;
   });
 
   $("#cellSize").change(function(){
