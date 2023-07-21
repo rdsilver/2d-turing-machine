@@ -75,7 +75,6 @@ class TuringMachine {
   }
 
   step() {
-    if (!this.rules) return;
     if (this.halted) return;
     if (this.headerCoords[0] < 0 || this.headerCoords[0] >= this.width ||
         this.headerCoords[1] < 0 || this.headerCoords[1] >= this.height) {
@@ -108,6 +107,7 @@ class TuringMachine {
         return;
     }
 
+    console.log(this.rules, rule);
     let newVal = parseInt(rule[0]);
     let direction = rule[1];
     let newState = rule[2];
@@ -159,11 +159,7 @@ class TuringMachine {
     } while (index1 === 0 && index2 === 0);
     rules[index1][index2] = '---';
 
-    if (rules.map(subArray => subArray.join('')).join('').indexOf(STATE_STRING[index1]) >= 0) {
-      return rules;
-    } else {
-      this.generateRules();
-    }
+    return rules;
   }
 
   initializeFromHash() {
@@ -197,7 +193,6 @@ class TuringMachine {
   }
   
   setHash() {
-    if (!this.rules) return;
     window.location.hash = 'machine=' + this.rules.map(subArray => subArray.join('')).join('_');
   }
 }
