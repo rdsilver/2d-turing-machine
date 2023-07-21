@@ -87,9 +87,7 @@ class TuringMachine {
     this.steps++;
     $('#steps').html(this.steps);
 
-    let convertedState = this.state.charCodeAt(0) <= 90 ?
-        this.state.charCodeAt(0) - 65 :
-        this.state.charCodeAt(0) - 71;
+    let convertedState = STATE_STRING.indexOf(this.state);
     let rule = this.rules[convertedState][this.getGridValue(this.headerCoords[0], this.headerCoords[1])];
 
     if (rule === '---') {
