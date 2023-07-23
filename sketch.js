@@ -19,7 +19,9 @@ function draw() {
     turingMachine.step();
     updateUI();
 
-    if ($('#shouldSearch').is(':checked') && (turingMachine.halted || turingMachine.outOfBounds || (Object.keys(turingMachine.grid).length < 5 && turingMachine.steps > 200))) {
+    if ($('#shouldSearch').is(':checked') && 
+    (turingMachine.halted || turingMachine.outOfBounds || 
+      (Object.keys(turingMachine.grid).length < 30 && turingMachine.steps > 300))) {
       resetMachine();
     }
 }
@@ -156,7 +158,46 @@ class TuringMachine {
     } while (index1 === 0 && index2 === 0);
     rules[index1][index2] = '---';
 
-    return rules;
+    if (this.canReachEmptyState(rules)) {
+      return rules;
+    }
+
+    return this.generateRules();
+  }
+
+  canReachEmptyState(rules) {
+    const visited = new Set();
+    const possibleVals = new Set();
+
+    possibleVals.add(0);
+
+    function dfs(state) {
+        // If we've already visited this state, return
+        if (visited.has(state)) return false;
+
+        visited.add(state);
+        const stateIndex = STATE_STRING.indexOf(state[0]);
+
+        for (let [i,cell] of rules[stateIndex].entries()) {
+            if (!possibleVals.has(i)) continue;
+
+            // Check if we've reached the target state
+            if (cell === '---') return true;
+
+            const nextState = cell[2];
+
+            possibleVals.add(parseInt(cell[0]));
+            possibleVals.forEach(possibleVal => {
+              if (!visited.has(nextState + possibleVal)) {
+                if (dfs(nextState + possibleVal)) return true;
+              }
+            })
+        }
+
+        return false;
+    }
+
+    return dfs('A0');
   }
 
   initializeFromHash() {
