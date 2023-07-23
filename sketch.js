@@ -20,8 +20,8 @@ function draw() {
     updateUI();
 
     if ($('#shouldSearch').is(':checked') && 
-    (turingMachine.halted || turingMachine.outOfBounds || 
-      (Object.keys(turingMachine.grid).length < 30 && turingMachine.steps > 300))) {
+    (turingMachine.steps > 20000 || turingMachine.halted || turingMachine.outOfBounds || 
+      (Object.keys(turingMachine.grid).length < 100 && turingMachine.steps > 500))) {
       resetMachine();
     }
 }
@@ -122,8 +122,7 @@ class TuringMachine {
     rect(this.headerCoords[0] * this.cellSize, this.headerCoords[1] * this.cellSize, this.cellSize, this.cellSize);
 
     // move header
-    let directionConversion = { 'U': [0, -1], 'D': [0, 1], 'L': [-1, 0], 'R': [1, 0] };
-    let newDirection = directionConversion[direction];
+    let newDirection = DIRECTIONS[direction];
     this.headerCoords = [this.headerCoords[0] + newDirection[0], this.headerCoords[1] + newDirection[1]];
 
     if (this.cellSize <= 3) noStroke() 
