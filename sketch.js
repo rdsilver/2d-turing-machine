@@ -7,6 +7,7 @@ const KEY_N = 78;
 let turingMachine;
 let maxSteps = 0;
 let leaderURL = '';
+let drawnDelayedStateOnce = false;
 
 function setup() {
     createCanvas(window.innerWidth - 50, window.innerHeight - 200).parent('sketch');
@@ -18,11 +19,20 @@ function setup() {
 function draw() {
     turingMachine.step();
     updateUI();
+    
 
-    if ($('#shouldSearch').is(':checked') && 
-    (turingMachine.steps > 20000 || turingMachine.halted || turingMachine.outOfBounds || 
-      (Object.keys(turingMachine.grid).length < 100 && turingMachine.steps > 500))) {
-      resetMachine();
+    if (drawnDelayedStateOnce) {
+      if ($('#shouldSearch').is(':checked') && 
+      (turingMachine.steps > 20000 || turingMachine.halted || turingMachine.outOfBounds || 
+        (Object.keys(turingMachine.grid).length < 100 && turingMachine.steps > 500))) {
+          resetMachine();
+      }
+
+      drawnDelayedStateOnce = false;
+    }
+
+    if (turingMachine.halted) {
+      drawnDelayedStateOnce = true;
     }
 }
 
@@ -68,7 +78,7 @@ class TuringMachine {
     this.steps = 0;
     this.headerCoords = [Math.round(this.width / 2), Math.round(this.height / 2)];
     this.state = 'A';
-    this.rules = this.generateRules();
+    this.rules = generateRules();
     this.halted = false;
     this.outOfBounds = false;
     this.colors = COLOR_PALLETE;
@@ -145,60 +155,6 @@ class TuringMachine {
     }
   }
 
-  generateRules() {
-    const rules = Array.from({ length: this.states },
-      () => Array.from({ length: this.symbols },
-          () => this.generateRandomString(this.symbols, this.states)));
-    
-    let index1, index2;
-    do {
-      index1 = Math.floor(Math.random() * this.states);
-      index2 = Math.floor(Math.random() * this.symbols);
-    } while (index1 === 0 && index2 === 0);
-    rules[index1][index2] = '---';
-
-    if (this.canReachEmptyState(rules)) {
-      return rules;
-    }
-
-    return this.generateRules();
-  }
-
-  canReachEmptyState(rules) {
-    const visited = new Set();
-    const possibleVals = new Set();
-
-    possibleVals.add(0);
-
-    function dfs(state) {
-        // If we've already visited this state, return
-        if (visited.has(state)) return false;
-
-        visited.add(state);
-        const stateIndex = STATE_STRING.indexOf(state[0]);
-
-        for (let [i,cell] of rules[stateIndex].entries()) {
-            if (!possibleVals.has(i)) continue;
-
-            // Check if we've reached the target state
-            if (cell === '---') return true;
-
-            const nextState = cell[2];
-
-            possibleVals.add(parseInt(cell[0]));
-            possibleVals.forEach(possibleVal => {
-              if (!visited.has(nextState + possibleVal)) {
-                if (dfs(nextState + possibleVal)) return true;
-              }
-            })
-        }
-
-        return false;
-    }
-
-    return dfs('A0');
-  }
-
   initializeFromHash() {
     if (window.location.hash) {
       this.rules = window.location.hash.split('=')[1].split('_').map(subString => subString.match(/.{1,3}/g));
@@ -221,52 +177,8 @@ class TuringMachine {
         line(0, j * this.cellSize, width, j * this.cellSize);
     }
   }
-
-  generateRandomString(symbols, states) {
-    let newState = STATE_STRING.charAt(Math.floor(Math.random() * states));
-    let direction = Object.keys(DIRECTIONS).join('').charAt(Math.floor(Math.random() * 4));
-    let newSymbol = SYMBOL_STRING.charAt(Math.floor(Math.random() * symbols));
-    return '' + newSymbol + direction + newState;
-  }
   
   setHash() {
     window.location.hash = 'machine=' + this.rules.map(subArray => subArray.join('')).join('_');
   }
-}
-
-$(document).ready(function(){
-  $("#states").change(function(){
-    window.location.hash = '';
-    turingMachine = new TuringMachine($("#cellSize").val(), $("#states").val(), $('#symbols').val());
-    leaderURL = ''
-    maxSteps = 0;
-  });
-
-  $("#symbols").change(function(){
-    window.location.hash = '';
-    turingMachine = new TuringMachine($("#cellSize").val(), $("#states").val(), $('#symbols').val());
-    leaderURL = ''
-    maxSteps = 0;
-  });
-
-  $("#cellSize").change(function(){
-    background('white');
-    turingMachine = new TuringMachine($("#cellSize").val(), $("#states").val(), $('#symbols').val());
-  });
-
-  $("#stepsPerSecond").change(function(){
-    frameRate(parseInt($("#stepsPerSecond").val()));
-  });
-
-  $('#getLeader').on('click', function() {
-    copyTextToClipboard(leaderURL);
-  });
-});
-
-function copyTextToClipboard(text) {
-  var $temp = $("<input>");
-  $("body").append($temp);
-  $temp.val(text).select();
-  document.execCommand("copy");
-  $temp.remove();
 }
