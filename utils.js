@@ -12,14 +12,14 @@ function generateRules() {
         } while (index1 === 0 && index2 === 0);
         rules[index1][index2] = '---';
       
-        // if (canReachEmptyState(rules)) {
-        let {halted, outputString} = getTuringMachineOutputString(rules, 100 + maxSteps);
-        // let longestRepeatingString = longestRepeatingSubstring(outputString);
+        if (canReachEmptyState(rules)) {
+          let {halted, outputString} = getTuringMachineOutputString(rules, 100 + (maxSteps * 2));
+          // let longestRepeatingString = longestRepeatingSubstring(outputString);
 
-        if (halted && outputString.length/2 > maxSteps / 5) {
-          break;  // Exit the loop if the conditions are satisfied
+          if (halted && outputString.length/2 >= maxSteps / 5) {
+            break;  // Exit the loop if the conditions are satisfied
+          }
         }
-        // }
     }
     return rules;
 }
@@ -69,62 +69,76 @@ function generateRules() {
   }
   
   function getTuringMachineOutputString(table, moves = 100) {
-      let startPosition = {x: 0, y: 0};
-      let initialState = 'A';
-      let position = {...startPosition};
-      let state = initialState;
-      let outputString = '';
-      let halted = false;
-      let knownValues = {};
-  
-      const getPositionKey = (pos) => `${pos.x},${pos.y}`;
-  
-      for (let i = 0; i < moves; i++) {
-          const currentCell = knownValues[getPositionKey(position)] || '0';
-          const ruleIndex = STATE_STRING.indexOf(state);
-          const cellValue = parseInt(currentCell, 10);
-  
-  
-          outputString += '' + ruleIndex + cellValue;
-          const command = table[ruleIndex][cellValue];
-          const writeValue = command[0];
-          const direction = command[1];
-          const newState = command[2];
-  
-          // Write value to the current position if it's not zero
-          if (writeValue !== '0') {
-              knownValues[getPositionKey(position)] = writeValue;
-          } else if (knownValues[getPositionKey(position)]) {
-              delete knownValues[getPositionKey(position)];  // Remove from map if value is 0
-          }
-  
-          // Move the position based on the direction
-          switch (direction) {
-              case 'U': 
-                  position.y -= 1;
-                  break;
-              case 'D':
-                  position.y += 1;
-                  break;
-              case 'L':
-                  position.x -= 1;
-                  break;
-              case 'R':
-                  position.x += 1;
-                  break;
-              default:
-                  halted = true;
-                  break;
-          }
+    let positionX = 0;
+    let positionY = 0;
+    let state = 'A';
+    let outputArray = [];
+    let halted = false;
+    let knownValues = {};
 
-          if (halted) break;
-  
-          // Update the state
-          state = newState;
-      }
-  
-      return {halted, outputString};
-  }
+    for (let i = 0; i < moves; i++) {
+        let positionKey = positionX + ',' + positionY;
+        const currentCell = knownValues[positionKey] || '0';
+        const ruleIndex = STATE_STRING.indexOf(state);
+        const cellValue = parseInt(currentCell, 10);
+
+        outputArray.push(ruleIndex);
+        outputArray.push(cellValue);
+        
+        const command = table[ruleIndex][cellValue];
+        const writeValue = command[0];
+        const direction = command[1];
+        const newState = command[2];
+
+        // Write value to the current position if it's not zero
+        if (writeValue !== '0') {
+            knownValues[positionKey] = writeValue;
+        } else if (knownValues[positionKey]) {
+            delete knownValues[positionKey];  // Remove from map if value is 0
+        }
+
+        // Move the position based on the direction
+        switch (direction) {
+            case 'U': 
+                positionY -= 1;
+                break;
+            case 'D':
+                positionY += 1;
+                break;
+            case 'L':
+                positionX -= 1;
+                break;
+            case 'R':
+                positionX += 1;
+                break;
+            default:
+                halted = true;
+                break;
+        }
+
+        if (halted) break;
+        if (i === 100) {
+          let hasLongRepeatingString = longestRepeatingSubstring(outputArray.join('')).length > 30;
+
+          if (hasLongRepeatingString) {
+            break;
+          }
+        }
+
+        // if (i === 1000) {
+        //   let hasLongRepeatingString = longestRepeatingSubstring(outputArray.join('')).length > 333;
+
+        //   if (hasLongRepeatingString) {
+        //     break;
+        //   }
+        // }
+
+        // Update the state
+        state = newState;
+    }
+
+    return {halted, outputString: outputArray.join('')};
+}
   
   function longestRepeatingSubstring(s) {
     const n = s.length;
